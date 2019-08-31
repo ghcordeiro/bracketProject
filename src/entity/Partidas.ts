@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, OneToOne, PrimaryColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, OneToOne, PrimaryColumn, ManyToMany, OneToMany, JoinColumn } from "typeorm";
 import { Times } from "./Times";
 import { Mapas } from "./Mapas";
 
@@ -10,21 +10,21 @@ export class Partidas {
     @CreateDateColumn({type:'date'})
     dataPartida: Date;
 
-    @PrimaryColumn()
+    @PrimaryColumn({name: "rodada"})
     rodada: number;
 
-    @ManyToOne(type => Times, times=> times.id)
-    idTime1: Times[];
-
     @ManyToOne(type => Times, times => times.id)
-    idTime2: Times[];
-
+    idTime1: Times;
+    
+    @ManyToOne(type => Times, times => times.id)
+    idTime2: Times;
+    
     @Column()
     roundstime1: number;
 
     @Column()
     roundstime2: number;
 
-    @OneToOne(type => Mapas, mapas => mapas.idMapa)
-    idMapa: Mapas[];
+    @OneToMany(type => Mapas, mapas => mapas.id)
+    idMapa: Mapas;
 }

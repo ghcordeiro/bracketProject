@@ -5,12 +5,12 @@ import { Partidas } from "./Partidas";
 export class Mapas {
 
     @PrimaryGeneratedColumn()
-    idMapa: number;
+    id: number;
 
     @Column()
     nomeMapa: String;
     
     @OneToOne(type => Partidas, partidas => partidas.idPartida)
-    partidas: Partidas[];
+    partidas: Partidas;
 
 }

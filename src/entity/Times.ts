@@ -11,6 +11,7 @@ export class Times {
     @Column()
     nomeTime: string;
 
-    @OneToMany(type => Partidas, partidas => partidas.idPartida)
+    @OneToMany(type => Partidas, partidas => (partidas.idPartida, partidas.idTime2, partidas.idTime2))
     partidas: Partidas[];
+
 }
