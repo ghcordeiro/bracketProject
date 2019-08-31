@@ -15,24 +15,21 @@ export class TimesController {
         try {
             //Save on database
             await this.timesRepository.save(time);
-            
-
         } catch (ex) {
-
-            //To working
             return "Houve um erro ao processar o JSON de entrada: " + ex
         }
     }
-/*
-    @Get('/partidas')
+
+    @Header("Access-Control-Allow-Origin", "*")
+    @Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    @Get('/times')
     async GetPartidas(){
         try {
-            let retorno = await this.partidasRepository.createQueryBuilder().select()
-            return retorno
+            return await this.timesRepository.find()
         } catch (ex) {
             //To working
             console.log(ex);
             return "Houve um erro ao processar o JSON de saída: " + ex
         }
-    }*/
+    }
 }

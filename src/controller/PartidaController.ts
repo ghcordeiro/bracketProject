@@ -23,16 +23,17 @@ export class PartidaController {
             return "Houve um erro ao processar o JSON de entrada: " + ex
         }
     }
-/*
+
+    @Header("Access-Control-Allow-Origin", "*")
+    @Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
     @Get('/partidas')
     async GetPartidas(){
         try {
-            let retorno = await this.partidasRepository.createQueryBuilder().select()
-            return retorno
+            return this.partidasRepository.find()
         } catch (ex) {
             //To working
             console.log(ex);
             return "Houve um erro ao processar o JSON de saída: " + ex
         }
-    }*/
+    }
 }
