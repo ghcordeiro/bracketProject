@@ -1,6 +1,7 @@
-import { Header, JsonController, Post, Get, Body } from "routing-controllers";
+import { Header, JsonController, Post, Get, Body, Param } from "routing-controllers";
 import { getRepository } from "typeorm";
 import { Partidas } from "../entity/Partidas";
+
 
 @JsonController()
 export class PartidaController {
@@ -13,10 +14,26 @@ export class PartidaController {
     async PostPatidas(@Body() partida: Partidas) {
 
         try {
+
+            let partidas = new Partidas();
+
+            let existsPartida = await this.partidasRepository
+            .createQueryBuilder("partidas")
+            .where("partidas.rodada = :rodada")
+            .andWhere("partidas.idTime1 = :id1")
+            .andWhere("partidas.idTime2 = :id2")
+            .setParameters({rodada: partida.rodada, 
+                            id1: partida.idTime1,
+                            id2: partida.idTime2})
+            .getMany();
+            
+            partidas = existsPartida.find(x => x.idPartida > 0)
+            if(typeof(partidas) !== "undefined"){
+                return `Partida já cadastrada. ID: ${partidas.idPartida}`
+            }
+            
             //Save on database
             await this.partidasRepository.save(partida);
-            
-
         } catch (ex) {
 
             //To working
@@ -26,10 +43,23 @@ export class PartidaController {
 
     @Header("Access-Control-Allow-Origin", "*")
     @Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-    @Get('/partidas')
-    async GetPartidas(){
+    @Get('/partidas/:id')
+    async GetPartidas(@Param("id") idPartida: any){
         try {
-            return this.partidasRepository.find()
+            let partidas = new Partidas();
+
+            let existsPartida = await this.partidasRepository
+            .createQueryBuilder("partidas")
+            .where("partidas.idPartida = :partida")
+            .setParameters({partida: idPartida})
+            .getMany();
+            
+            partidas = existsPartida.find(x => x.idPartida === idPartida)
+            if(typeof(partidas) !== "undefined"){
+                return partidas
+            }
+
+            return "Partida não encontrada para o ID " + idPartida
         } catch (ex) {
             //To working
             console.log(ex);
